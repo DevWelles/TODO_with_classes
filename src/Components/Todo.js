@@ -1,4 +1,5 @@
 import React from "react";
+import { mojKontekst } from "../App";
 
 const Todo = ({ text, todo, todos, setTodos }) => {
   const deleteHandler = () => {

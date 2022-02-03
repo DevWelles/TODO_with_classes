@@ -14,6 +14,8 @@ export default class App extends Component {
       filteredTodos: [],
     };
 
+    this.prevState = {};
+
     this.setInputText = this.setInputText.bind(this);
     this.setTodos = this.setTodos.bind(this);
     this.setStatus = this.setStatus.bind(this);
@@ -60,7 +62,20 @@ export default class App extends Component {
   }
 
   componentDidUpdate() {
-    //baca mi error odi
+    //baca mi error odi ovo je infinit loop jer odma u componentDidUpdate zove this.filterHandler() koji minja stanje
+    if (
+      this.state.todos !== this.prevState.todos || //čak mi i nisu potrebna ova ifalica jer se moze injati na promejne ilo kojeg stanja
+      this.state.status !== this.prevState.status //ali ovo je primjer kako se točno prebacuje iz onih hooksa u classnu sitanksu
+    ) {
+      this.filterHandler();
+    }
+  }
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    this.prevState = prevState;
+  }
+
+  componentDidMount() {
     this.filterHandler();
   }
 
@@ -78,6 +93,7 @@ export default class App extends Component {
           setStatus={this.setStatus} //isto minja samo u statetu status ovisno sto odaberemo u select elementu
           setFilteredTodos={this.setFilteredTodos}
           filteredTodos={this.state.filteredTodos}
+          status={this.state.status}
         />
         <TodoList
           setTodos={this.setTodos}

@@ -6,9 +6,23 @@ const Form = ({
   todos,
   inputText,
   setStatus,
+  status,
   setFilteredTodos,
   filteredTodos,
 }) => {
+  const filterHandler = () => {
+    //ovu func možemo raspisati i u useEffect, ali ovako je odvojena zasebna metoda koju pozivamo u useEffectu
+    if (status === "completed") {
+      const completed = todos.filter((todo) => todo.completed === true);
+      setFilteredTodos(completed);
+    } else if (status === "uncompleted") {
+      const uncompleted = todos.filter((todo) => todo.completed === false);
+      setFilteredTodos(uncompleted);
+    } else {
+      setFilteredTodos(todos);
+    }
+  };
+
   const inputTextHandler = (e) => {
     //console.log(e.target.value);
     setInputText(e.target.value);
@@ -22,7 +36,8 @@ const Form = ({
       { text: inputText, completed: false, id: Math.random() * 10000 },
     ]);
     console.log(todos);
-    setFilteredTodos(todos); //tu je todos prazna array [] zašto hvata stanje naon mountanja a ne nakon updatea?
+    filterHandler();
+    //setFilteredTodos(todos); //tu je todos prazna array [] zašto hvata stanje naon mountanja a ne nakon updatea?
     setInputText(""); //reset u stateu
   };
 
